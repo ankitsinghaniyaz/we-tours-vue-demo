@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     formatDate(date) {
-      debugger
       const parsedDate = parse(date, "dd.MM.yyyy HH:mm:ss", new Date());
       return format(parsedDate, 'dd.MM.yyyy')
     },
