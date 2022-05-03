@@ -15,13 +15,13 @@
     <section class="flex flex-row items-center p-4 bg-gray-200 justify-between">
       <div>
         Orders in the next &nbsp;&nbsp;
-        <select class="px-1 py-2 bg-white" v-model="filters.days">
+        <select @change="applyFilter" class="px-1 py-2 bg-white" v-model="filters.days">
           <option value="7 days">7 days</option>
           <option value="30 days">30 days</option>
           <option value="180 days">180 days</option>
         </select>
       </div>
-      <div class="bg-white px-1 py-2 rounded-full text-sm text-gray-500">
+      <div class="bg-white h-8 w-8 rounded-full text-sm text-gray-500 flex items-center justify-center">
         {{ orders.length }}
       </div>
     </section>
@@ -42,6 +42,7 @@
 <script>
 import axios from "axios";
 import throttle from "lodash/throttle";
+import { add, format } from "date-fns";
 
 export default {
   name: "Orders",
@@ -55,6 +56,21 @@ export default {
       fetchingOrders: false,
     };
   },
+  computed: {
+    startAt() {
+      switch(this.filters.days) {
+        case "7 days":
+          return format(add(new Date(), { days: -7 }), "dd.MM.yyyy");
+        case "30 days":
+          return format(add(new Date(), { days: -30 }), "dd.MM.yyyy");
+        case "180 days":
+          return format(add(new Date(), { days: -180 }), "dd.MM.yyyy");
+        default:
+          console.error('No start date was selected');
+          return null;
+      }
+    }
+  },
   methods: {
     applyFilter() {
       this.fetchOrdersThrottled();
@@ -64,14 +80,19 @@ export default {
     }, 2500),
     async fetchOrders() {
       this.fetchingOrders = true;
+
+      const params = {
+        _search: this.filters.search,
+        startAt: {
+          after: this.startAt,
+        }
+      };
+
+      
       try {
         const { data: orders } = await axios.get(
           "https://demo-travelize.buspaket.de/api/public/orders",
-          {
-            params: {
-              '_search': this.filters.search,
-            },
-          }
+          { params },
         );
         this.orders = orders;
       } finally {
