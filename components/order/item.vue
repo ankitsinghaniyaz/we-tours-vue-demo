@@ -5,7 +5,9 @@
 
       <div v-if="order.mostUrgentTodo && order.mostUrgentTodo.dueDate" class="flex items-center px-2 py-1 text-gray-600 bg-gray-200 border border-gray-400">
         <div class="rounded-full p-2 bg-red-500 mr-2"></div>
-        <time :datetime="order.mostUrgentTodo.dueDate">{{ order.mostUrgentTodo.dueDate }}</time>
+        <time :datetime="order.mostUrgentTodo.dueDate">
+          {{ formatDate(order.mostUrgentTodo.dueDate) }}
+        </time>
       </div>
     </div>
     <div class="flex flex-row m-2 items-center">
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+import { parse, format } from "date-fns";
 export default {
   name: "OrderItem",
   props: {
@@ -32,6 +35,13 @@ export default {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    formatDate(date) {
+      debugger
+      const parsedDate = parse(date, "dd.MM.yyyy HH:mm:ss", new Date());
+      return format(parsedDate, 'dd.MM.yyyy')
+    },
   }
 }
 </script>
