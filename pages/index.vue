@@ -14,8 +14,8 @@
 
     <section class="flex flex-row items-center p-4 bg-gray-200 justify-between">
       <div>
-        Orders in the next &nbsp;&nbsp;
-        <select @change="applyFilter" class="px-1 py-2 bg-white" v-model="filters.days">
+        Orders in the next
+        <select @change="applyFilter" class="px-1 py-2 ml-2 bg-white" v-model="filters.days">
           <option value="7 days">7 days</option>
           <option value="30 days">30 days</option>
           <option value="180 days">180 days</option>
@@ -26,7 +26,7 @@
       </div>
     </section>
 
-    <loader height="100px" v-if="fetchingOrders" />
+    <loader class="m-auto mt-40" height="75px" v-if="fetchingOrders" />
     <section v-else>
       <order-item
         :order="order"
