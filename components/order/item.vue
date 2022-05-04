@@ -1,5 +1,5 @@
 <template>
-  <a :href="`/orders/${order.id}`" class="flex flex-col border-b-2 border-gray-400 py-2">
+  <nuxt-link :to="`/orders/${order.id}`" class="flex flex-col border-b-2 border-gray-400 py-2">
     <div class="flex justify-between p-2">
       <h5 class="text-md font-semibold text-gray-700">{{ order.trip.name }}</h5>
 
@@ -23,7 +23,7 @@
       <badge primary>{{ order.trip.destinations.map(d => d.name).join(', ') }}</badge>
       <avatar class="ml-auto" :user="order.user" />
     </div>
-  </a>
+  </nuxt-link>
 </template>
 
 <script>
